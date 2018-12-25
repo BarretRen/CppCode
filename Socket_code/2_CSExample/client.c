@@ -31,7 +31,7 @@ int main()
         write(socketId, buf, strlen(buf));
         read(socketId, buf, sizeof(buf));//read reply from server
 
-        printf("received from server: [%s]\r\n", buf);
+        printf("received from server: %s\r\n", buf);
         memset(buf, 0, sizeof(buf));
     }
 

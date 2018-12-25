@@ -20,6 +20,12 @@ int main()
     /** addr.sin_addr = htonl(INADDR_ANY); //指定本地任意ip地址，使用网络字节序 */
     addr.sin_addr.s_addr = inet_addr("127.0.0.1");
 
+    //set REUSEADDR
+    int on = 1;
+    if(setsockopt(socketId, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on)) < 0)
+    {
+        printf("socket set REUSEADDR failed\r\n");
+    }
     //start bind
     if (bind(socketId, (sockaddr*)&addr, sizeof(addr)) < 0)
     {
