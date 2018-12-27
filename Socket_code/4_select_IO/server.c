@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <signal.h>
 #include <sys/wait.h>
+#include <sys/select.h>
+#include <errno.h>
 
 void customHandler(int sig)
 {
@@ -46,54 +48,96 @@ int main()
         printf("socket listen failed\r\n");
     }
 
-    sockaddr remoteAddr;
+    sockaddr_in remoteAddr;
     socklen_t remoteLen = sizeof(remoteAddr);
     int remoteConnId;
 
-    pid_t pid;
-    while (1)
+    //select IO复用方式实现多客户端连接处理
+    int connectedClient[FD_SETSIZE];//最大值为select函数可接受的最多fd
+    for (int i = 0; i < FD_SETSIZE; i++)
     {
-        //get connection from socket queue
-        if ((remoteConnId = accept(socketId, (sockaddr*)&remoteAddr, &remoteLen)) < 0)
+        connectedClient[i] = -1;
+    }
+    int nready;
+    int maxFd = socketId;
+    fd_set rset;
+    fd_set allset;
+    FD_ZERO(&rset);
+    FD_ZERO(&allset);
+    FD_SET(socketId, &allset);//第一次添加监听socket，此时还没有客户端socket
+
+    while(1)
+    {
+        rset = allset;
+        nready = select(maxFd + 1, &rset, NULL, NULL, NULL);
+        if (nready == -1)
         {
-            printf("socket accept failed\r\n");
-            break;
+            //select失败，判断是否为系统中断导致，是中断则继续
+            if (errno == EINTR)
+                continue;
+            printf("select failed");
+            return 0;
         }
-        
-        pid = fork(); //创建新进程处理socket连接
-        if (pid == -1)
+        else if (nready == 0)
+            continue;
+
+        if (FD_ISSET(socketId, &rset))
         {
-            printf("create new process failed\r\n");
-            break;
-        }
-        if (pid == 0)
-        {
-            //子进程不需要处理socket监听，关闭监听
-            close(socketId);
-            //子进程处理connection
-            char rcvBuf[1024];
-            while(1)
+            //监听端口有可读事件，表示有客户端连接过来，需要建立连接
+            remoteConnId = accept(socketId, (sockaddr*)&remoteAddr, &remoteLen);
+            if (remoteConnId == -1)
             {
-                memset(rcvBuf, 0, sizeof(rcvBuf));
+                printf("accept failed");
+                return 0;
+            }
+            int i;
+            for (int i = 0; i < FD_SETSIZE; i++)
+            {
+                if (connectedClient[i] == -1)
+                {
+                    connectedClient[i] = remoteConnId;
+                    break;
+                }
+            }
+            if (i == FD_SETSIZE)
+            {
+                printf("too many clients");
+                return 0;
+            }
+
+            printf("IP = %s, port = %d\r\n", inet_ntoa(remoteAddr.sin_addr), ntohs(remoteAddr.sin_port));
+            FD_SET(remoteConnId, &allset);//添加已连接的socket到下一次select集合中
+            if (remoteConnId > maxFd) //更新最大fd值
+                maxFd = remoteConnId;
+            if (--nready <= 0)
+                continue; //返回集合都处理了，继续下一次循环
+        }
+        //处理已连接socket的读写事件
+        for (int i = 0; i < FD_SETSIZE; i++)
+        {
+            remoteConnId = connectedClient[i];
+            if (remoteConnId == -1)
+                continue;
+            if (FD_ISSET(remoteConnId, &rset))
+            {
+                char rcvBuf[1024] = {0};
                 int ret = read(remoteConnId, rcvBuf, sizeof(rcvBuf));// 从socket中读取数据流
                 if (ret == 0)
                 {
                     printf("close client: [%d]\r\n", remoteConnId);
-                    break;
+                    connectedClient[i] = -1;
+                    FD_CLR(remoteConnId, &allset);
+                    close(remoteConnId);
                 }
                 fputs(rcvBuf, stdout);
                 write(remoteConnId, rcvBuf, strlen(rcvBuf));//将数据再写回remote端
+                
+                if (--nready <= 0)
+                    continue;
             }
-            close(remoteConnId);
-            //退出子进程
-            _exit(0);
-        }
-        else
-        {
-            //父进程不需要处理socket连接，关闭connection
-            close(remoteConnId);
         }
     }
+
     close(socketId);
     return 0;
 }
