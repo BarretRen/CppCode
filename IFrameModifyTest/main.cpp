@@ -5,7 +5,7 @@ using namespace std;
 int main()
 {
     const int L1_BUFFER_HDR_SIZE = 4;
-    unsigned int frame[49] = {0x2d, 0x00, 0x04, 0x00, 0x00, 0x01, 0x10, 0x1c, 0x08, 0x02, 0x01, 0x01, 0x05, 0x04, 0x03, 0x80,
+    unsigned int frame[51] = {0x2d, 0x00, 0x04, 0x00, 0x00, 0x01, 0x10, 0x1c, 0x08, 0x02, 0x01, 0x01, 0x05, 0x04, 0x03, 0x80,
                               0x90, 0xa3, 0x18, 0x03, 0xa9, 0x83, 0x81, 0x6c, 0x0d, 0x01, 0x81, 0x31, 0x33, 0x32, 0x39, 0x31,
                               0x36, 0x32, 0x30, 0x30, 0x31, 0x34, 0x70, 0x09, 0xc0, 0x38, 0x38, 0x36, 0x31, 0x38, 0x36, 0x35,
                               0x36};
@@ -53,7 +53,7 @@ int main()
         // {
         //     frame[calling_start + 4 + i] = cgDigits[i];
         // }
-        //cdpn lendth后只有两个个bit8，所以这里减2
+        //cdpn lendth后只有两个bit8，所以这里减2
         // for (int i = cgDigits_len; i < frame[calling_start + 1] - 2; i++)
         // {
         //     frame[calling_start + 4 + i] = 0;
@@ -79,22 +79,39 @@ int main()
         // }
         //no cgpn IE//
         //方法3： 整个IE置0,并后移
-        int cgpn_len = frame[calling_start + 1] + 2;
+        // int cgpn_len = frame[calling_start + 1] + 2;
+        // unsigned int tmp_frame[49];
+        // for (int i = 0; i < frame_len; i++)
+        // {
+            // tmp_frame[i] = frame[i];
+        // }
+        // for (int i = calling_start, j= calling_start+cgpn_len; j < frame_len; i++,j++)
+        // {
+            // frame[i] = tmp_frame[j];
+        // }
+        // for(int i = 1; i <=cgpn_len; i++)
+        // {
+            // frame[frame_len - i] = 0x00;
+        // }
+        
+        //IE扩大，该IE后数据后移n位，空出n位用于数据插入
         unsigned int tmp_frame[49];
         for (int i = 0; i < frame_len; i++)
         {
             tmp_frame[i] = frame[i];
         }
-        for (int i = calling_start, j= calling_start+cgpn_len; j < frame_len; i++,j++)
+        for (int i=48; i<48+2;i++)
+        {
+            frame[i] = 0;
+        }
+        for (int i=48+2, j=48; j<49;i++,j++)
         {
             frame[i] = tmp_frame[j];
         }
-        for(int i = 1; i <=cgpn_len; i++)
-        {
-            frame[frame_len - i] = 0x00;
-        }
+        frame[0]+=2;
     }
-
+    
+    frame_len = frame[0] + L1_BUFFER_HDR_SIZE;
     //打印frame内容
     for (int i = 0; i < frame_len; i++)
     {
