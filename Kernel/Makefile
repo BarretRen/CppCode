@@ -1,5 +1,5 @@
-obj-m := mydelay.o
-mydelay-objs := testdelay.o kn_common.o
+obj-m := myslab.o
+myslab-objs := testslab.o kn_common.o
 
 #generate the path
 CURRENT_PATH:=$(shell pwd)
