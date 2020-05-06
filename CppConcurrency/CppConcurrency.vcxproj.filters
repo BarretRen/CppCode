@@ -18,5 +18,11 @@
     <ClCompile Include="1_helloworld.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="2_RAII.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="3_thread_parameter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
