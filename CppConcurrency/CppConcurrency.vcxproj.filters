@@ -33,5 +33,8 @@
     <ClCompile Include="6_lock_guard.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="7_std_lock.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

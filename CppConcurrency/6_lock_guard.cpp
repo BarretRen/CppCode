@@ -20,7 +20,7 @@ void add_global_v()
 	//my_lock被释放时，互斥量会自动解锁
 }
 
-int main()
+int main6()
 {
 	std::cout <<  "main : " << gloabl_v << std::endl;
 
