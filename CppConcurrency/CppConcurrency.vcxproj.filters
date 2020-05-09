@@ -24,5 +24,11 @@
     <ClCompile Include="3_thread_parameter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="4_hardware_concurrency.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="5_thread_id.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
