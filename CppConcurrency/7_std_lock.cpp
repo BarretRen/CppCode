@@ -55,7 +55,7 @@ void assign_lunch_partner(Employee& e1, Employee& e2)
     send_mail(e2, e1);
 }
 
-int main()
+int main7()
 {
     //定义四个员工
     Employee alice("alice"), bob("bob"), christina("christina"), dave("dave");
@@ -71,4 +71,6 @@ int main()
     //打印输出
     std::cout << alice.output() << '\n' << bob.output() << '\n'
         << christina.output() << '\n' << dave.output() << '\n';
+
+    return 0;
 }

@@ -36,5 +36,14 @@
     <ClCompile Include="7_std_lock.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="8_unique_lock.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="9_std_once.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="10_shared_mutex.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
