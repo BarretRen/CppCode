@@ -33,7 +33,7 @@ private:
     unsigned int value_ = 0;
 };
 
-int main() {
+int main10() {
     ThreadSafeCounter counter;
     //lamda表达式构建函数
     auto increment_and_print = [&counter]() {
@@ -49,6 +49,7 @@ int main() {
 
     thread1.join();
     thread2.join();
+    return 0;
 }
 
 // 解释：下列输出在单核机器上生成。 thread1 开始时，它首次进入循环并调用 increment() ，
