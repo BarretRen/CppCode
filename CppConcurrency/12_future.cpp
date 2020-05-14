@@ -16,7 +16,7 @@ void calculate_sum(int a, int b, std::promise<int> p)
     p.set_value(sum);//设置承诺值，通知future
 }
 
-int main()
+int main12()
 {
     //用途1，返回子线程的返回值
     // 来自 async() 的 future，异步任务

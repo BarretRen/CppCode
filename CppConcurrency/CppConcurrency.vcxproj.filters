@@ -51,5 +51,8 @@
     <ClCompile Include="12_future.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="13_exception_future.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
