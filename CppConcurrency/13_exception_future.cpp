@@ -14,7 +14,7 @@ double square_root(double x)
     return sqrt(x);
 }
 
-int main()
+int main13()
 {
     std::future<double> f = std::async(square_root, -1);
 	try
