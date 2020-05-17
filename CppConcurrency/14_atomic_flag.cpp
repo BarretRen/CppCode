@@ -20,7 +20,7 @@ void f(int n)
     }
 }
 
-int main()
+int main14()
 {
     std::vector<std::thread> v;
     for (int n = 0; n < 10; ++n) {

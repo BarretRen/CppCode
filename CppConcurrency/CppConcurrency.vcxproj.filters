@@ -57,5 +57,14 @@
     <ClCompile Include="14_atomic_flag.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="15_memory_order_seq_cst.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="16_memory_order_relaxed.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="17_memory_order_release.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
