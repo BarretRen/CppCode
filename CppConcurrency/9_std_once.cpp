@@ -1,11 +1,11 @@
 /*
-Ê¹ÓÃstd::oneceºÍstd::once_flag¿ØÖÆÖ»µ÷ÓÃÒ»´ÎµÄËø
+ä½¿ç”¨std::oneceå’Œstd::once_flagæ§åˆ¶åªè°ƒç”¨ä¸€æ¬¡çš„é”
 */
 
 #include <iostream>
 #include <thread>
 #include <mutex>
-//¶¨Òåonce_flag
+//å®šä¹‰once_flag
 
 static std::once_flag resource_flag;
 

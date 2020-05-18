@@ -1,5 +1,5 @@
 /*
-Ê¹ÓÃstd::future±£´æÒì³£²¢Å×³ö
+ä½¿ç”¨std::futureä¿å­˜å¼‚å¸¸å¹¶æŠ›å‡º
 */
 
 #include <iostream>
@@ -19,12 +19,12 @@ int main13()
     std::future<double> f = std::async(square_root, -1);
 	try
 	{
-		//µ÷ÓÃget()º¯Êı£¬Èç¹ûÃ»ÓĞÎÊÌâ£¬Ôò·µ»Øº¯ÊıÖµ£»Èç¹û´æÔÚÒì³££¬Ôòfuture»áÅ×³ö±£´æµ½Òì³££¬±»ÏÂÃæµÄcatch²¶»ñµ½
+		//è°ƒç”¨get()å‡½æ•°ï¼Œå¦‚æœæ²¡æœ‰é—®é¢˜ï¼Œåˆ™è¿”å›å‡½æ•°å€¼ï¼›å¦‚æœå­˜åœ¨å¼‚å¸¸ï¼Œåˆ™futureä¼šæŠ›å‡ºä¿å­˜åˆ°å¼‚å¸¸ï¼Œè¢«ä¸‹é¢çš„catchæ•è·åˆ°
 		double y = f.get();
 	}
 	catch (const std::exception& e)
 	{
-		std::cout << e.what() << std::endl;//´òÓ¡½á¹û£º"x < 0"
+		std::cout << e.what() << std::endl;//æ‰“å°ç»“æœï¼š"x < 0"
 	}
 	return 0;
 }

@@ -1,5 +1,5 @@
 /*
-原子操作的内存顺序：获取释放序列memory_order_release
+鍘熷瓙鎿嶄綔鐨勫唴瀛橀『搴忥細鑾峰彇閲婃斁搴忓垪memory_order_release
 */
 #include <atomic>
 #include <thread>

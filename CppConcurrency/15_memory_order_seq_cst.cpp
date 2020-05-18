@@ -1,5 +1,5 @@
 /*
-原子操作的内存顺序：排序一致顺序memory_order_seq_cst
+鍘熷瓙鎿嶄綔鐨勫唴瀛橀『搴忥細鎺掑簭涓�鑷撮『搴弇emory_order_seq_cst
 */
 #include <atomic>
 #include <thread>

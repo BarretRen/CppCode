@@ -1,5 +1,5 @@
 /*
-原子操作的内存顺序：松散序列memory_order_relaxed
+鍘熷瓙鎿嶄綔鐨勫唴瀛橀『搴忥細鏉炬暎搴忓垪memory_order_relaxed
 */
 #include <atomic>
 #include <thread>

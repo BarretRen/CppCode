@@ -1,5 +1,5 @@
 /*
-Ê¹ÓÃstd:atomic_flagÊµÏÖ×ÔĞı»¥³âËø
+ä½¿ç”¨std:atomic_flagå®ç°è‡ªæ—‹äº’æ–¥é”
 */
 #include <iostream>
 #include <thread>
@@ -8,15 +8,15 @@
 
 using namespace std;
 
-std::atomic_flag lock = ATOMIC_FLAG_INIT;//³õÊ¼»¯
+std::atomic_flag lock = ATOMIC_FLAG_INIT;//åˆå§‹åŒ–
 
 void f(int n)
 {
     for (int cnt = 0; cnt < 2; ++cnt) {
-        while (lock.test_and_set(std::memory_order_acquire))  // »ñµÃËø
-            ; // Èç¹û·µ»ØÖµÎªÇå³ı£¬ÔòÒ»Ö±Ñ­»·£¨×ÔĞı£©
+        while (lock.test_and_set(std::memory_order_acquire))  // è·å¾—é”
+            ; // å¦‚æœè¿”å›å€¼ä¸ºæ¸…é™¤ï¼Œåˆ™ä¸€ç›´å¾ªç¯ï¼ˆè‡ªæ—‹ï¼‰
         std::cout << "Output from thread " << n << '\n';
-        lock.clear(std::memory_order_release);               // ÊÍ·ÅËø
+        lock.clear(std::memory_order_release);               // é‡Šæ”¾é”
     }
 }
 

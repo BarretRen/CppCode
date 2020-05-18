@@ -1,5 +1,5 @@
 /*
-*ÏòÏß³ÌthreadÖĞ´«µİ²ÎÊıµÄ¼¸ÖÖ·½Ê½
+*å‘çº¿ç¨‹threadä¸­ä¼ é€’å‚æ•°çš„å‡ ç§æ–¹å¼
 */
 #include <iostream>
 #include <thread>
@@ -24,7 +24,7 @@ public:
 
 void str_f(int i, string const& s)
 {
-	cout << "str_f£¬input parameters: " << i << "; " << s << endl;
+	cout << "str_fï¼Œinput parameters: " << i << "; " << s << endl;
 }
 
 void struct_f(int i, Data& data)
@@ -39,28 +39,28 @@ void pointer_f(int i, std::unique_ptr<Data> data)
 
 int main3()
 {
-	//1. »ù±¾ÀàĞÍºÍ×Ö·û´®µÄ´«µİ
+	//1. åŸºæœ¬ç±»å‹å’Œå­—ç¬¦ä¸²çš„ä¼ é€’
 	thread t1(str_f, 1, "hello str");
 	t1.join();
-	//2. ×Ö·û´®µÄ´«µİ£¬´«µİ×Ö·ûÖ¸Õë£¬ĞèÒªÏß×ª³Éstring£¬ÔÙ´«µİ¸øÏß³Ì
+	//2. å­—ç¬¦ä¸²çš„ä¼ é€’ï¼Œä¼ é€’å­—ç¬¦æŒ‡é’ˆï¼Œéœ€è¦çº¿è½¬æˆstringï¼Œå†ä¼ é€’ç»™çº¿ç¨‹
 	char buffer[1024] = { 0 };
 	cin >> buffer;
 	thread t2(str_f, 2, string(buffer));
 	t2.join();
-	//3. ½á¹¹ÌåµÄ´«µİ
+	//3. ç»“æ„ä½“çš„ä¼ é€’
 	Data data = { 20,25 };
-	//thread t3(struct_f, 3, data);//Ö±½Ó´«µİ½á¹¹Ìå£¬Ïß³ÌÎŞ·¨Íê³ÉÖµ¿½±´£¬±àÒë²»Í¨¹ı
-	thread t3(struct_f, 3, std::ref(data));//Ê¹ÓÃref£¬Ö±½Ó´«µİÒıÓÃµ½Ïß³Ì£¬¶ø²»ÊÇ¸´ÖÆÒ»·İ
+	//thread t3(struct_f, 3, data);//ç›´æ¥ä¼ é€’ç»“æ„ä½“ï¼Œçº¿ç¨‹æ— æ³•å®Œæˆå€¼æ‹·è´ï¼Œç¼–è¯‘ä¸é€šè¿‡
+	thread t3(struct_f, 3, std::ref(data));//ä½¿ç”¨refï¼Œç›´æ¥ä¼ é€’å¼•ç”¨åˆ°çº¿ç¨‹ï¼Œè€Œä¸æ˜¯å¤åˆ¶ä¸€ä»½
 	t3.join();
-	//4. ´«µİÀàµÄ³ÉÔ±º¯ÊıºÍ²ÎÊı
+	//4. ä¼ é€’ç±»çš„æˆå‘˜å‡½æ•°å’Œå‚æ•°
 	X my_x;
-	std::thread t4(&X::do_work, &my_x, 4);//´«µİÀàÀïº¯Êı£¬¶ÔÏó£¬ºÍº¯ÊıËùĞè²ÎÊı
+	std::thread t4(&X::do_work, &my_x, 4);//ä¼ é€’ç±»é‡Œå‡½æ•°ï¼Œå¯¹è±¡ï¼Œå’Œå‡½æ•°æ‰€éœ€å‚æ•°
 	t4.join();
-	//5. std::move´«µİÖ¸Õë
-	std::unique_ptr<Data> data2(new Data);////Î¨Ò»ÖÇÄÜÖ¸Õë£¬²»¿É¸´ÖÆ
+	//5. std::moveä¼ é€’æŒ‡é’ˆ
+	std::unique_ptr<Data> data2(new Data);////å”¯ä¸€æ™ºèƒ½æŒ‡é’ˆï¼Œä¸å¯å¤åˆ¶
 	data2->height = 50;
 	data2->weight = 55;
-	thread t5(pointer_f, 5, std::move(data2));//Ö¸ÕëÎŞ·¨Ê¹ÓÃstd::ref, Ê¹ÓÃmove×ªÒÆËùÓĞÈ¨µ½Ïß³Ì
+	thread t5(pointer_f, 5, std::move(data2));//æŒ‡é’ˆæ— æ³•ä½¿ç”¨std::ref, ä½¿ç”¨moveè½¬ç§»æ‰€æœ‰æƒåˆ°çº¿ç¨‹
 	t5.join();
 	return 0;
 }

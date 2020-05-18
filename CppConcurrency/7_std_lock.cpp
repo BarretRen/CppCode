@@ -1,5 +1,5 @@
 /*
-Ê¹ÓÃstd::lock±ÜÃâËÀËø
+ä½¿ç”¨std::locké¿å…æ­»é”
 */
 #include <mutex>
 #include <thread>
@@ -12,8 +12,8 @@
 struct Employee {
     Employee(std::string id) : id(id) {}
     std::string id;
-    std::vector<std::string> lunch_partners;//Îç²Í»ï°é£¬»¥³âµÄ
-    std::mutex m;//»¥³âËø
+    std::vector<std::string> lunch_partners;//åˆé¤ä¼™ä¼´ï¼Œäº’æ–¥çš„
+    std::mutex m;//äº’æ–¥é”
     std::string output() const
     {
         std::string ret = "Employee " + id + " has lunch partners: ";
@@ -25,30 +25,30 @@ struct Employee {
 
 void send_mail(Employee&, Employee&)
 {
-    // Ä£ÄâºÄÊ±µÄ·¢ĞÅ²Ù×÷
+    // æ¨¡æ‹Ÿè€—æ—¶çš„å‘ä¿¡æ“ä½œ
     std::this_thread::sleep_for(std::chrono::seconds(1));
 }
-//·ÖÅä»ï°é
+//åˆ†é…ä¼™ä¼´
 void assign_lunch_partner(Employee& e1, Employee& e2)
 {
     static std::mutex io_mutex;
     {
-        std::lock_guard<std::mutex> lk(io_mutex);//ÓÃÓÚ¶ÁÊäÈë²ÎÊıÄÚÈİµÄ»¥³âËø£¬¶ÁÍêÁ¢¿ÌÊÍ·Å
+        std::lock_guard<std::mutex> lk(io_mutex);//ç”¨äºè¯»è¾“å…¥å‚æ•°å†…å®¹çš„äº’æ–¥é”ï¼Œè¯»å®Œç«‹åˆ»é‡Šæ”¾
         std::cout << e1.id << " and " << e2.id << " are waiting for locks" << std::endl;
     }
 
     {
-        // ÓÃ std::lock»ñµÃ¶ş¸öemployeeµÄËø£¬¶ø²»µ£ĞÄ¶Ô assign_lunch_partner µÄÆäËûµ÷ÓÃ»áËÀËøÎÒÃÇ
+        // ç”¨ std::lockè·å¾—äºŒä¸ªemployeeçš„é”ï¼Œè€Œä¸æ‹…å¿ƒå¯¹ assign_lunch_partner çš„å…¶ä»–è°ƒç”¨ä¼šæ­»é”æˆ‘ä»¬
         /*std::lock(e1.m, e2.m);
         std::lock_guard<std::mutex> lk1(e1.m, std::adopt_lock);
         std::lock_guard<std::mutex> lk2(e2.m, std::adopt_lock);*/
-        // C++17 ÖĞ¿ÉÓÃµÄ½ÏÓÅ½â·¨
+        // C++17 ä¸­å¯ç”¨çš„è¾ƒä¼˜è§£æ³•
         std::scoped_lock lk(e1.m, e2.m);
         {
-            std::lock_guard<std::mutex> lk(io_mutex);//ÓÃÓÚ¶ÁÊäÈë²ÎÊıÄÚÈİµÄ»¥³âËø£¬¶ÁÍêÁ¢¿ÌÊÍ·Å
+            std::lock_guard<std::mutex> lk(io_mutex);//ç”¨äºè¯»è¾“å…¥å‚æ•°å†…å®¹çš„äº’æ–¥é”ï¼Œè¯»å®Œç«‹åˆ»é‡Šæ”¾
             std::cout << e1.id << " and " << e2.id << " got locks" << std::endl;
         }
-        e1.lunch_partners.push_back(e2.id);//ÔÚlockµÄ±£»¤Ö®ÏÂ£¬¿ÉÒÔ·ÅĞÄµÄ²åÈëÊı¾İ
+        e1.lunch_partners.push_back(e2.id);//åœ¨lockçš„ä¿æŠ¤ä¹‹ä¸‹ï¼Œå¯ä»¥æ”¾å¿ƒçš„æ’å…¥æ•°æ®
         e2.lunch_partners.push_back(e1.id);
     }
     send_mail(e1, e2);
@@ -57,18 +57,18 @@ void assign_lunch_partner(Employee& e1, Employee& e2)
 
 int main7()
 {
-    //¶¨ÒåËÄ¸öÔ±¹¤
+    //å®šä¹‰å››ä¸ªå‘˜å·¥
     Employee alice("alice"), bob("bob"), christina("christina"), dave("dave");
 
-    // ´´½¨ËÄ¸öÏß³ÌÖ¸ÅÉ»ï°é£¬ÒòÎª·¢ÓÊ¼ş¸øÓÃ»§¸æÖªÎç²ÍÖ¸ÅÉ£¬»áÏûºÄ³¤Ê±¼ä
+    // åˆ›å»ºå››ä¸ªçº¿ç¨‹æŒ‡æ´¾ä¼™ä¼´ï¼Œå› ä¸ºå‘é‚®ä»¶ç»™ç”¨æˆ·å‘ŠçŸ¥åˆé¤æŒ‡æ´¾ï¼Œä¼šæ¶ˆè€—é•¿æ—¶é—´
     std::vector<std::thread> threads;
     threads.emplace_back(assign_lunch_partner, std::ref(alice), std::ref(bob));
     threads.emplace_back(assign_lunch_partner, std::ref(christina), std::ref(bob));
     threads.emplace_back(assign_lunch_partner, std::ref(christina), std::ref(alice));
     threads.emplace_back(assign_lunch_partner, std::ref(dave), std::ref(bob));
-    //Ã¿¸öÏß³Ìµ÷ÓÃjoin
+    //æ¯ä¸ªçº¿ç¨‹è°ƒç”¨join
     for (auto& thread : threads) thread.join();
-    //´òÓ¡Êä³ö
+    //æ‰“å°è¾“å‡º
     std::cout << alice.output() << '\n' << bob.output() << '\n'
         << christina.output() << '\n' << dave.output() << '\n';
 

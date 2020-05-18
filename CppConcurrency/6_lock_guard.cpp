@@ -1,23 +1,23 @@
 /*
-Ê¹ÓÃ»¥³âÁ¿mutexºÍlock_guard½øĞĞ¼ÓËø½âËø²Ù×÷¡£
-lock_guard¿ÉÒÔ×Ô¶¯½øĞĞ¼ÓËø½âËø£¬²»ĞèÒªÊÖ¶¯µ÷ÓÃlockºÍunlock
+ä½¿ç”¨äº’æ–¥é‡mutexå’Œlock_guardè¿›è¡ŒåŠ é”è§£é”æ“ä½œã€‚
+lock_guardå¯ä»¥è‡ªåŠ¨è¿›è¡ŒåŠ é”è§£é”ï¼Œä¸éœ€è¦æ‰‹åŠ¨è°ƒç”¨lockå’Œunlock
 */
 
 #include <iostream>
 #include <thread>
 #include <mutex>
 
-int gloabl_v = 0;//È«¾Ö±äÁ¿
-std::mutex g_v_mutex;//¶¨ÒåÒ»¸ö»¥³âÁ¿ÓÃÓÚ±£»¤È«¾Ö±äÁ¿
+int gloabl_v = 0;//å…¨å±€å˜é‡
+std::mutex g_v_mutex;//å®šä¹‰ä¸€ä¸ªäº’æ–¥é‡ç”¨äºä¿æŠ¤å…¨å±€å˜é‡
 
 void add_global_v()
 {
-	//¶¨ÒåÒ»¸ölock_guard£¬×Ô¶¯¼ÓËø
+	//å®šä¹‰ä¸€ä¸ªlock_guardï¼Œè‡ªåŠ¨åŠ é”
 	std::lock_guard<std::mutex> my_lock(g_v_mutex);
 	gloabl_v++;
 
 	std::cout << std::this_thread::get_id() << " : " << gloabl_v << std::endl;
-	//my_lock±»ÊÍ·ÅÊ±£¬»¥³âÁ¿»á×Ô¶¯½âËø
+	//my_lockè¢«é‡Šæ”¾æ—¶ï¼Œäº’æ–¥é‡ä¼šè‡ªåŠ¨è§£é”
 }
 
 int main6()

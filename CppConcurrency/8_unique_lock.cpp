@@ -1,5 +1,5 @@
 /*
-std::unique_lock´úÌælock_guard£¬¸ü¾ßÓĞÁé»îĞÔ
+std::unique_lockä»£æ›¿lock_guardï¼Œæ›´å…·æœ‰çµæ´»æ€§
 */
 
 #include <iostream>
@@ -7,7 +7,7 @@ std::unique_lock´úÌælock_guard£¬¸ü¾ßÓĞÁé»îĞÔ
 #include <mutex>
 
 struct Box {
-	explicit Box(int num) : num_things(num) {}// explicitÓÃÓÚ¹¹Ôìº¯Êı£¬ÒâÎª²»ÔÊĞíÒşÊ½ÀàĞÍ×ª»»
+	explicit Box(int num) : num_things(num) {}// explicitç”¨äºæ„é€ å‡½æ•°ï¼Œæ„ä¸ºä¸å…è®¸éšå¼ç±»å‹è½¬æ¢
 
 	int num_things;
 	std::mutex m;
@@ -15,16 +15,16 @@ struct Box {
 
 void transfer(Box& from, Box& to, int num)
 {
-	//¶¨Òåunique_lock
+	//å®šä¹‰unique_lock
 	std::unique_lock<std::mutex> lock1(from.m, std::defer_lock);
 	std::unique_lock<std::mutex> lock2(to.m, std::defer_lock);
-	//Ê¹ÓÃstd::lock»ñÈ¡Á½¸öËø£¬±ÜÃâËÀËø
+	//ä½¿ç”¨std::lockè·å–ä¸¤ä¸ªé”ï¼Œé¿å…æ­»é”
 	std::lock(lock1, lock2);
 
 	from.num_things -= num;
 	to.num_things += num;
 	std::cout << "from:" << from.num_things << ", to:" << to.num_things << std::endl;
-	//lock1, lock2Îö¹¹µÄÊ±ºò×Ô¶¯½âËø
+	//lock1, lock2ææ„çš„æ—¶å€™è‡ªåŠ¨è§£é”
 }
 
 int main8()

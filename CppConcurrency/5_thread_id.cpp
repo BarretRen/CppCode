@@ -1,5 +1,5 @@
 /*
-两种获取线程标识id的方法，id可用于比较是否是同一线程
+涓ょ鑾峰彇绾跨▼鏍囪瘑id鐨勬柟娉曪紝id鍙敤浜庢瘮杈冩槸鍚︽槸鍚屼竴绾跨▼
 */
 #include <iostream>
 #include <thread>
@@ -12,8 +12,8 @@ int main5()
 {
 	thread th(hello);
 	th.join();
-	thread::id childId = th.get_id();//获取指定线程对象的id
-	thread::id masterId = this_thread::get_id();//获取当前线程的id
+	thread::id childId = th.get_id();//鑾峰彇鎸囧畾绾跨▼瀵硅薄鐨刬d
+	thread::id masterId = this_thread::get_id();//鑾峰彇褰撳墠绾跨▼鐨刬d
 	cout << "child thread id:" << childId << endl;
 	cout << "master thread id:" << masterId << endl;
 	cout << (masterId == childId) << endl;

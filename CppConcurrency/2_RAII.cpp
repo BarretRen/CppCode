@@ -1,5 +1,5 @@
 /*
-*Ê¹ÓÃ×ÊÔ´»ñÈ¡¼´³õÊ¼»¯·½Ê½¡±(RAII£¬Resource Acquisition Is Initialization)£¬²¢ÇÒÌá¹©Ò»¸öÀà£¬ÔÚÎö¹¹º¯ÊıÖĞÊ¹ÓÃjoin()
+*ä½¿ç”¨èµ„æºè·å–å³åˆå§‹åŒ–æ–¹å¼â€(RAIIï¼ŒResource Acquisition Is Initialization)ï¼Œå¹¶ä¸”æä¾›ä¸€ä¸ªç±»ï¼Œåœ¨ææ„å‡½æ•°ä¸­ä½¿ç”¨join()
 */
 #include <iostream>
 #include <thread>
@@ -14,12 +14,12 @@ public:
 	explicit thread_guard(std::thread& t_) : t(t_) {}
 	~thread_guard()
 	{
-		if (t.joinable()) // 1£¬·µ»Øtrue£¬ËµÃ÷Ïß³Ìt»¹Ã»ÓĞ½áÊø
+		if (t.joinable()) // 1ï¼Œè¿”å›trueï¼Œè¯´æ˜çº¿ç¨‹tè¿˜æ²¡æœ‰ç»“æŸ
 		{
-			t.join();      // 2£¬´ËÊ±£¬Ö÷Ïß³ÌĞèÒªµÈ´ıÏß³Ìt½áÊø£¬²»È»¾Ö²¿±äÁ¿some_local_state»áÌáÇ°ÊÍ·Å
+			t.join();      // 2ï¼Œæ­¤æ—¶ï¼Œä¸»çº¿ç¨‹éœ€è¦ç­‰å¾…çº¿ç¨‹tç»“æŸï¼Œä¸ç„¶å±€éƒ¨å˜é‡some_local_stateä¼šæå‰é‡Šæ”¾
 		}
 	}
-	// 3 C++11ĞÂÌØĞÔ£¬²»ÔÊĞí±àÒëÆ÷×Ô¶¯Éú³É¸³Öµº¯ÊıºÍ¿½±´¹¹Ôìº¯Êı
+	// 3 C++11æ–°ç‰¹æ€§ï¼Œä¸å…è®¸ç¼–è¯‘å™¨è‡ªåŠ¨ç”Ÿæˆèµ‹å€¼å‡½æ•°å’Œæ‹·è´æ„é€ å‡½æ•°
 	thread_guard(thread_guard const&) = delete;
 	thread_guard& operator=(thread_guard const&) = delete;
 };
@@ -42,7 +42,7 @@ int main2()
 	int some_local_state = 0;
 	func my_func(some_local_state);
 	std::thread t(my_func);
-	thread_guard g(t);//½»¸øguardÀà¹ÜÀíÏß³ÌtµÄÏú»Ù
+	thread_guard g(t);//äº¤ç»™guardç±»ç®¡ç†çº¿ç¨‹tçš„é”€æ¯
 	cout << "do_something_in_current_thread();" << endl;
 	return 0;
 }    // 4

@@ -1,5 +1,5 @@
 /*
-ÆÚÍûÖµfutureµÄ¶àÖÖÓÃÍ¾
+æœŸæœ›å€¼futureçš„å¤šç§ç”¨é€”
 */
 #include <future>
 #include <iostream>
@@ -13,40 +13,40 @@ int find_the_answer(int a, int b)
 void calculate_sum(int a, int b, std::promise<int> p)
 {
     int sum = a + b;
-    p.set_value(sum);//ÉèÖÃ³ĞÅµÖµ£¬Í¨Öªfuture
+    p.set_value(sum);//è®¾ç½®æ‰¿è¯ºå€¼ï¼Œé€šçŸ¥future
 }
 
 int main12()
 {
-    //ÓÃÍ¾1£¬·µ»Ø×ÓÏß³ÌµÄ·µ»ØÖµ
-    // À´×Ô async() µÄ future£¬Òì²½ÈÎÎñ
+    //ç”¨é€”1ï¼Œè¿”å›å­çº¿ç¨‹çš„è¿”å›å€¼
+    // æ¥è‡ª async() çš„ futureï¼Œå¼‚æ­¥ä»»åŠ¡
     std::future<int> the_answer = std::async(find_the_answer, 1, 2);
-    std::cout << "The async answer is " << the_answer.get() << std::endl;//·µ»ØÖµÍ¨¹ıfuture get()·½·¨»ñµÃ
+    std::cout << "The async answer is " << the_answer.get() << std::endl;//è¿”å›å€¼é€šè¿‡future get()æ–¹æ³•è·å¾—
 
-    //ÓÃÍ¾2£¬Í¨¹ıpackaged_taskÔËĞĞÈÎÎñ£¬»ñÈ¡·µ»ØÖµ
-    //2.1´«Èëº¯Êı£¬ÔÚµ÷ÓÃtaskÊ±´«Èë²ÎÊı
-    std::packaged_task<int(int, int)> task1(find_the_answer); //´«Èëº¯Êı£¬Ä£°åÖĞÖ¸¶¨·µ»ØÖµºÍÊäÈë²ÎÊıµÄÀàĞÍ
-    std::future<int> f1 = task1.get_future();  // »ñÈ¡ future
-    task1(2, 3);//Ö±½ÓÔËĞĞtask£¬Í¬Ê±´«ÈëÄÚ²¿º¯ÊıĞèÒª²ÎÊı
-    std::cout << "The task1 answer is " << f1.get() << std::endl;//´òÓ¡·µ»ØÖµ
-    //2.2 Ê¹ÓÃstd::thread³õÊ¼»¯Ê±ÎªtaskÊäÈë²ÎÊı
-    std::packaged_task<int(int, int)> task2(find_the_answer); //´«Èëº¯Êı£¬Ä£°åÖĞÖ¸¶¨·µ»ØÖµºÍÊäÈë²ÎÊıµÄÀàĞÍ
+    //ç”¨é€”2ï¼Œé€šè¿‡packaged_taskè¿è¡Œä»»åŠ¡ï¼Œè·å–è¿”å›å€¼
+    //2.1ä¼ å…¥å‡½æ•°ï¼Œåœ¨è°ƒç”¨taskæ—¶ä¼ å…¥å‚æ•°
+    std::packaged_task<int(int, int)> task1(find_the_answer); //ä¼ å…¥å‡½æ•°ï¼Œæ¨¡æ¿ä¸­æŒ‡å®šè¿”å›å€¼å’Œè¾“å…¥å‚æ•°çš„ç±»å‹
+    std::future<int> f1 = task1.get_future();  // è·å– future
+    task1(2, 3);//ç›´æ¥è¿è¡Œtaskï¼ŒåŒæ—¶ä¼ å…¥å†…éƒ¨å‡½æ•°éœ€è¦å‚æ•°
+    std::cout << "The task1 answer is " << f1.get() << std::endl;//æ‰“å°è¿”å›å€¼
+    //2.2 ä½¿ç”¨std::threadåˆå§‹åŒ–æ—¶ä¸ºtaskè¾“å…¥å‚æ•°
+    std::packaged_task<int(int, int)> task2(find_the_answer); //ä¼ å…¥å‡½æ•°ï¼Œæ¨¡æ¿ä¸­æŒ‡å®šè¿”å›å€¼å’Œè¾“å…¥å‚æ•°çš„ç±»å‹
     std::future<int> f2 = task2.get_future();
-    std::thread task2_th(std::move(task2), 3, 4);//´«Èë²ÎÊı
+    std::thread task2_th(std::move(task2), 3, 4);//ä¼ å…¥å‚æ•°
     task2_th.join();
     std::cout << "The task1 answer is " << f2.get() << std::endl;
-    //2.3 Ê¹ÓÃstd::bind°ü×°º¯ÊıºÍÊäÈë²ÎÊı
-    std::packaged_task<int()> task3(std::bind(find_the_answer, 4, 5));//Ä£°åÖĞÖ»ĞèÒªÖ¸¶¨·µ»ØÖµÀàĞÍ
+    //2.3 ä½¿ç”¨std::bindåŒ…è£…å‡½æ•°å’Œè¾“å…¥å‚æ•°
+    std::packaged_task<int()> task3(std::bind(find_the_answer, 4, 5));//æ¨¡æ¿ä¸­åªéœ€è¦æŒ‡å®šè¿”å›å€¼ç±»å‹
     std::future<int> f3 = task3.get_future();
-    task3();//Ö±½ÓÔËĞĞtask£¬²»ÔÙĞèÒª´«µİ²ÎÊı
+    task3();//ç›´æ¥è¿è¡Œtaskï¼Œä¸å†éœ€è¦ä¼ é€’å‚æ•°
     std::cout << "The task1 answer is " << f3.get() << std::endl;
 
-    //ÓÃÍ¾3£¬Ê¹ÓÃstd::promiseºÍfuture×÷ÎªÏß³Ì¼äĞÅºÅ
+    //ç”¨é€”3ï¼Œä½¿ç”¨std::promiseå’Œfutureä½œä¸ºçº¿ç¨‹é—´ä¿¡å·
     std::promise<int> sum_promise;
     std::future<int> promise_future = sum_promise.get_future();
-    std::thread promise_th(calculate_sum, 6, 7, std::move(sum_promise));//¹¹½¨Ïß³Ì£¬´«Èëº¯Êı£¬²ÎÊıºÍpromise¶ÔÏó
+    std::thread promise_th(calculate_sum, 6, 7, std::move(sum_promise));//æ„å»ºçº¿ç¨‹ï¼Œä¼ å…¥å‡½æ•°ï¼Œå‚æ•°å’Œpromiseå¯¹è±¡
     promise_th.join();
-    // // future::get() ½«µÈ´ıÖ±ÖÁ¸Ã future ÓµÓĞºÏ·¨½á¹û²¢È¡µÃËü, ÎŞĞèÔÚ get() Ç°µ÷ÓÃ wait()
+    // // future::get() å°†ç­‰å¾…ç›´è‡³è¯¥ future æ‹¥æœ‰åˆæ³•ç»“æœå¹¶å–å¾—å®ƒ, æ— éœ€åœ¨ get() å‰è°ƒç”¨ wait()
     std::cout << "The promise_th answer is " << promise_future.get() << std::endl;
     
     return 0;

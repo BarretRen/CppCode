@@ -1,5 +1,5 @@
 /*
-通过std::thread::hardware_concurrency()获取系统支持的最大线程数
+閫氳繃std::thread::hardware_concurrency()鑾峰彇绯荤粺鏀寔鐨勬渶澶х嚎绋嬫暟
 */
 #include <iostream>
 #include <thread>

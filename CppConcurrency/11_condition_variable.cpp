@@ -1,5 +1,5 @@
 /*
-Ê¹ÓÃstd::condition_variableÌõ¼ş±äÁ¿Óë std::mutex ×éºÏÊ¹ÓÃ £¬ÒÔ´Ù½øÏß³Ì¼äÍ¬²½
+ä½¿ç”¨std::condition_variableæ¡ä»¶å˜é‡ä¸ std::mutex ç»„åˆä½¿ç”¨ ï¼Œä»¥ä¿ƒè¿›çº¿ç¨‹é—´åŒæ­¥
 */
 #include <iostream>
 #include <string>
@@ -8,29 +8,29 @@
 #include <condition_variable>
 
 std::mutex m;
-std::condition_variable cv;//¶¨ÒåÌõ¼ş±äÁ¿ÓÃÓÚÍ¬²½
+std::condition_variable cv;//å®šä¹‰æ¡ä»¶å˜é‡ç”¨äºåŒæ­¥
 std::string data;
 bool ready = false;
 bool processed = false;
 
 void worker_thread()
 {
-    // µÈ´ıÖ±ÖÁ main() ·¢ËÍÊı¾İ
+    // ç­‰å¾…ç›´è‡³ main() å‘é€æ•°æ®
     std::unique_lock<std::mutex> lk(m);
-    //Ìõ¼ş±äÁ¿ÉèÖÃ¼à¿Ø¶ÔÏóºÍµÈ´ıÌõ¼ş£¬Ìõ¼şÎªready±äÎªtrue£¬·ñÔò×èÈû±¾Ïß³ÌÒ»Ö±µÈ´ı
+    //æ¡ä»¶å˜é‡è®¾ç½®ç›‘æ§å¯¹è±¡å’Œç­‰å¾…æ¡ä»¶ï¼Œæ¡ä»¶ä¸ºreadyå˜ä¸ºtrueï¼Œå¦åˆ™é˜»å¡æœ¬çº¿ç¨‹ä¸€ç›´ç­‰å¾…
     cv.wait(lk, [] {return ready; });
 
-    // µÈ´ıºó£¬ÎÒÃÇÕ¼ÓĞËø¡£
+    // ç­‰å¾…åï¼Œæˆ‘ä»¬å æœ‰é”ã€‚
     std::cout << "Worker thread is processing data\n";
     data += " after processing";
 
-    // ·¢ËÍÊı¾İ»Ø main()
+    // å‘é€æ•°æ®å› main()
     processed = true;
     std::cout << "Worker thread signals data processing completed\n";
 
-    // Í¨ÖªÇ°Íê³ÉÊÖ¶¯½âËø£¬ÒÔ±ÜÃâµÈ´ıÏß³Ì²Å±»»½ĞÑ¾Í×èÈû
+    // é€šçŸ¥å‰å®Œæˆæ‰‹åŠ¨è§£é”ï¼Œä»¥é¿å…ç­‰å¾…çº¿ç¨‹æ‰è¢«å”¤é†’å°±é˜»å¡
     lk.unlock();
-    cv.notify_one();//Í¨ÖªÒ»¸öµÈ´ıµÄÏß³Ì£¬ÕâÀïÖ»ÓĞÖ÷Ïß³Ì
+    cv.notify_one();//é€šçŸ¥ä¸€ä¸ªç­‰å¾…çš„çº¿ç¨‹ï¼Œè¿™é‡Œåªæœ‰ä¸»çº¿ç¨‹
 }
 
 int main11()
@@ -38,18 +38,18 @@ int main11()
     std::thread worker(worker_thread);
 
     data = "Example data";
-    // ·¢ËÍÊı¾İµ½ worker Ïß³Ì
+    // å‘é€æ•°æ®åˆ° worker çº¿ç¨‹
     {
         std::lock_guard<std::mutex> lk(m);
         ready = true;
         std::cout << "main() signals data ready for processing\n";
     }
-    cv.notify_one();//readyÒÑ¾­ÉèÖÃºÃ£¬Í¨Öª×ÓÏß³Ì
+    cv.notify_one();//readyå·²ç»è®¾ç½®å¥½ï¼Œé€šçŸ¥å­çº¿ç¨‹
 
-    // µÈºò worker
+    // ç­‰å€™ worker
     {
         std::unique_lock<std::mutex> lk(m);
-        cv.wait(lk, [] {return processed; });//Ö÷Ïß³ÌÉèÖÃÌõ¼ş±äÁ¿£¬µÈµ½×ÓÏß³Ì½«processed¸ÄÎªtrue
+        cv.wait(lk, [] {return processed; });//ä¸»çº¿ç¨‹è®¾ç½®æ¡ä»¶å˜é‡ï¼Œç­‰åˆ°å­çº¿ç¨‹å°†processedæ”¹ä¸ºtrue
     }
     std::cout << "Back in main(), data = " << data << '\n';
 
