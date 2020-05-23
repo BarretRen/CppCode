@@ -37,7 +37,7 @@ struct func
 	}
 };
 
-int main2()
+int main()
 {
 	int some_local_state = 0;
 	func my_func(some_local_state);

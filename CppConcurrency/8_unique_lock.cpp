@@ -27,7 +27,7 @@ void transfer(Box& from, Box& to, int num)
 	//lock1, lock2析构的时候自动解锁
 }
 
-int main8()
+int main()
 {
 	Box b1(100);
 	Box b2(50);

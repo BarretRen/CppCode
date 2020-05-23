@@ -8,7 +8,7 @@ using namespace std;
 
 void hello();
 
-int main5()
+int main()
 {
 	thread th(hello);
 	th.join();

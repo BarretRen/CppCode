@@ -19,7 +19,7 @@ void func()
 	std::call_once(resource_flag, do_one);
 }
 
-int main9()
+int main()
 {
 	std::thread t1(func);
 	std::thread t2(func);

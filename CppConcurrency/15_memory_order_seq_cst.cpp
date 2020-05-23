@@ -30,7 +30,7 @@ void read_y_then_x()
     if (x.load(std::memory_order_seq_cst))  // 4
         ++z;
 }
-int main15()
+int main()
 {
     x = false;
     y = false;

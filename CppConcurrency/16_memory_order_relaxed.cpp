@@ -19,7 +19,7 @@ void read_y_then_x16()
     if (a.load(std::memory_order_relaxed))  // 4
         ++c;
 }
-int main16()
+int main()
 {
     a = false;
     b = false;

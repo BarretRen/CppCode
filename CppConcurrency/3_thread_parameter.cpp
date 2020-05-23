@@ -37,7 +37,7 @@ void pointer_f(int i, std::unique_ptr<Data> data)
 	cout << "pointer_f, input parameters: " << i << "; height:" << data->height << ", weight:" << data->weight << endl;
 }
 
-int main3()
+int main()
 {
 	//1. 基本类型和字符串的传递
 	thread t1(str_f, 1, "hello str");

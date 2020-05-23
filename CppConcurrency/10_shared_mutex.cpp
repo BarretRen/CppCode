@@ -33,7 +33,7 @@ private:
     unsigned int value_ = 0;
 };
 
-int main10() {
+int main() {
     ThreadSafeCounter counter;
     //lamda表达式构建函数
     auto increment_and_print = [&counter]() {

@@ -11,7 +11,7 @@ void hello()//子线程将要执行的函数入口
     cout << "hello concurrent world" << endl;
 }
 
-int main1()
+int main()
 {
     thread th(hello);//创建一个子线程
     th.join();

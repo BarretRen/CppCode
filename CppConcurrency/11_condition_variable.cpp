@@ -33,7 +33,7 @@ void worker_thread()
     cv.notify_one();//通知一个等待的线程，这里只有主线程
 }
 
-int main11()
+int main()
 {
     std::thread worker(worker_thread);
 

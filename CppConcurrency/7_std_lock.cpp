@@ -55,7 +55,7 @@ void assign_lunch_partner(Employee& e1, Employee& e2)
     send_mail(e2, e1);
 }
 
-int main7()
+int main()
 {
     //定义四个员工
     Employee alice("alice"), bob("bob"), christina("christina"), dave("dave");
