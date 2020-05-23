@@ -1,7 +1,12 @@
 /*
 基于锁的线程安全栈
 */
+#ifndef THREAD_SAFE_TASK
+#define THREAD_SAFE_TASK
 #include <exception>
+#include <stack>
+#include <mutex>
+#include <memory>
 //自定义异常
 struct empty_stack : std::exception
 {
@@ -55,3 +60,4 @@ public:
         return data.empty();
     }
 };
+#endif
