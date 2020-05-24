@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <future>
+#include <math.h>
 
 double square_root(double x)
 {
