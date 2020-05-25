@@ -1,9 +1,10 @@
-//线程池，在29线程池中添加功能：可以返回每个任务的返回值
-#ifndef THREAD_POOL2
-#define THREAD_POOL2
+//线程池，在30线程池中为每个线程建立独立的任务队列
+#ifndef THREAD_POOL3
+#define THREAD_POOL3
 #include <future>
 #include <atomic>
 #include <vector>
+#include <queue>
 #include "21_threadsafe_queue2.hpp"
 #include "29_thread_pool.hpp"
 
@@ -55,16 +56,19 @@ public:
     function_wrapper &operator=(const function_wrapper &) = delete;
 };
 
-class thread_pool2
+class thread_pool3
 {
 private:
     std::atomic_bool done;
     threadsafe_queue<function_wrapper> work_queue; // 使用function_wrapper，而非使用std::function
-    std::vector<std::thread> threads;              // 保存pool里的工作线程
-    join_threads joiner;                           // join_threads使用RAII方式，保证pool销毁前所有线程能执行结束
+    typedef std::queue<function_wrapper> local_queue_type;
+    static thread_local std::unique_ptr<local_queue_type> local_work_queue; // unique_ptr指向每个线程本地（thread_local)的工作队列
+    std::vector<std::thread> threads;                                       // 保存pool里的工作线程
+    join_threads joiner;                                                    // join_threads使用RAII方式，保证pool销毁前所有线程能执行结束
 
     void worker_thread()
     {
+        local_work_queue.reset(new local_queue_type); // 3
         while (!done)
         {
             run_pending_task();
@@ -72,7 +76,7 @@ private:
     }
 
 public:
-    thread_pool2() : done(false), joiner(threads)
+    thread_pool3() : done(false), joiner(threads)
     {
         // pool中线程个数使用硬件支持的最大个数
         unsigned const thread_count = std::thread::hardware_concurrency();
@@ -82,7 +86,7 @@ public:
             for (unsigned i = 0; i < thread_count; ++i)
             {
                 // 创建工作线程，每个线程都执行worker_thread函数，在此函数中获取任务处理
-                threads.push_back(std::thread(&thread_pool2::worker_thread, this));
+                threads.push_back(std::thread(&thread_pool3::worker_thread, this));
             }
         }
         catch (...)
@@ -92,7 +96,7 @@ public:
         }
     }
 
-    ~thread_pool2()
+    ~thread_pool3()
     {
         done = true;
     }
@@ -106,8 +110,16 @@ public:
 
         std::packaged_task<result_type()> task(std::move(f)); // 封装一个异步任务，任务执行函数f
         std::future<result_type> res(task.get_future());      // 获取异步任务的future
-        work_queue.push(std::move(task));                     // 将任务添加到任务队列中
-        return res;                                           // 返回future给submit函数的调用者
+        if (local_work_queue)                                 // 检查当前线程是否具有一个工作队列，如果有则将任务放入本地队列
+        {
+            local_work_queue->push(std::move(task));
+        }
+        else
+        {
+            work_queue.push(std::move(task)); // 将任务添加到全局任务队列中
+        }
+
+        return res; // 返回future给submit函数的调用者
     }
     /*
     run_pending_task()的实现去掉了在worker_thread()函数的主循环。
@@ -116,7 +128,13 @@ public:
     void run_pending_task()
     {
         function_wrapper task;
-        if (work_queue.try_pop(task))
+        if (local_work_queue && !(local_work_queue->empty())) // 如果本地队列有任务，则优先处理本地队列的任务
+        {
+            task = std::move(local_work_queue->front());
+            local_work_queue->pop();
+            task();
+        }
+        else if (work_queue.try_pop(task)) //否则，在全局队列获取任务
         {
             task();
         }
