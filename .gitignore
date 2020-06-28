@@ -1,4 +1,6 @@
 *.out
+*.o
+*.s
 *.txt
 *.gch
 *.exe
