@@ -5,6 +5,7 @@
 #include <string.h>		/* for convenience */
 #include <unistd.h>		/* for convenience */
 #include <signal.h>		/* for SIG_ERR */
+#include <errno.h>
 #include <sys/types.h>		/* some systems still require this */
 #include <sys/stat.h>
 #include <sys/ioctl.h>
@@ -19,8 +20,8 @@ ssize_t writen(int fd, const void *ptr, size_t n)
     nleft = n;
     while (nleft > 0) {
         if ((nwritten = write(fd, ptr, nleft)) < 0) {
-            if (nleft == n)
-                return(-1); /* error, return -1 */
+            if (EINTR == errno)
+                return -1; /* error, return -1 */
             else
                 break;      /* error, return amount written so far */
         } else if (nwritten == 0) {
@@ -41,8 +42,8 @@ ssize_t readn(int fd, void *ptr, size_t n)
     nleft = n;
     while (nleft > 0) {
         if ((nread = read(fd, ptr, nleft)) < 0) {
-            if (nleft == n)
-                return(-1); /* error, return -1 */
+            if (EINTR == errno)
+                return -1; /* error, return -1 */
             else
                 break;      /* error, return amount read so far */
         } else if (nread == 0) {
