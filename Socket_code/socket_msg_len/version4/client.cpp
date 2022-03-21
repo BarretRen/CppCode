@@ -62,6 +62,7 @@ int main()
         if (writen(socketId, tmp, lenMsg) == -1)
             err_exit("writen socket error");
 
+        delete[] tmp;
         /**读取部分**/
         memset(&buf, 0, sizeof(buf));
         memset(&oltIndex, 0, oltSize);
